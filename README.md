@@ -140,7 +140,7 @@ material-dashboard-react
     │   │   ├── Lists
     │   │   ├── Navbars
     │   │   ├── Sidenav
-    │   │   ├── Tables
+    │   │   ├── Tabelas
     │   │   └── Timeline
     │   ├── layouts
     │   │   ├── authentication
@@ -149,7 +149,7 @@ material-dashboard-react
     │   │   ├── notifications
     │   │   ├── profile
     │   │   ├── rtl
-    │   │   └── tables
+    │   │   └── tabelas
     │   ├── App.js
     │   ├── index.js
     │   └── routes.js

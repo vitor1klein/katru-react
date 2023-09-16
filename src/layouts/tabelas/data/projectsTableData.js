@@ -55,11 +55,10 @@ export default function data() {
 
   return {
     columns: [
-      { Header: "project", accessor: "project", width: "30%", align: "left" },
-      { Header: "budget", accessor: "budget", align: "left" },
-      { Header: "status", accessor: "status", align: "center" },
-      { Header: "completion", accessor: "completion", align: "center" },
-      { Header: "action", accessor: "action", align: "center" },
+      { Header: "Fonte de Recurso", accessor: "project", width: "30%", align: "left" },
+      { Header: "Data Referência", accessor: "completion", align: "center" },
+      { Header: "Valor", accessor: "budget", align: "left" },
+      { Header: "Editar", accessor: "action", align: "center" },
     ],
 
     rows: [

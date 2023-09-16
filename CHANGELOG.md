@@ -125,7 +125,7 @@
   - DashboardNavbar
   - DefaultNavbar
 - Sidenav
-- Tables
+- Tabelas
   - DataTable
 - Timeline
   - TimelineList

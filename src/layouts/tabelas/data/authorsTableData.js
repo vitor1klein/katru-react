@@ -50,11 +50,12 @@ export default function data() {
 
   return {
     columns: [
-      { Header: "author", accessor: "author", width: "45%", align: "left" },
-      { Header: "function", accessor: "function", align: "left" },
-      { Header: "status", accessor: "status", align: "center" },
-      { Header: "employed", accessor: "employed", align: "center" },
-      { Header: "action", accessor: "action", align: "center" },
+      { Header: "Natureza da Despesa", accessor: "author", width: "45%", align: "left" },
+      { Header: "Despesa", accessor: "function", align: "left" },
+      { Header: "Fonte de Recurso", accessor: "status", align: "center" },
+      { Header: "Data", accessor: "employed", align: "center" },
+      { Header: "Valor", accessor: "test", align: "center" },
+      { Header: "Editar", accessor: "action", align: "center" },
     ],
 
     rows: [
