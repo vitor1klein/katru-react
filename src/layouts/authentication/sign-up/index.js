@@ -15,10 +15,13 @@ Coded by www.creative-tim.com
 
 // react-router-dom components
 import { Link } from "react-router-dom";
+import { useState } from "react";
+// import { useHistory} from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
+import Switch from "@mui/material/Switch";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -27,14 +30,55 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 
 // Authentication layout components
-import CoverLayout from "layouts/authentication/components/CoverLayout";
+import BasicLayout from "layouts/authentication/components/BasicLayout";
+import TermsAndConditionsModal from "layouts/authentication/sign-up/terms_conditions";
 
 // Images
-import bgImage from "assets/images/bg-sign-up-cover.jpeg";
+import bgImage from "assets/images/background.jpg";
+
+// Services
+import { registerUser } from "api/user-service";
 
 function Cover() {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [modalTermsAccepted, setModalTermsAccepted] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+  };
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleTermsAccepted = (event) => {
+    setTermsAccepted(event.target.checked);
+  };
+  const handleTermsAccepted2 = () => {
+    setModalTermsAccepted(true);
+    setTermsAccepted(true);
+    setOpen(false);
+  };
+
   return (
-    <CoverLayout image={bgImage}>
+    <BasicLayout image={bgImage}>
       <Card>
         <MDBox
           variant="gradient"
@@ -48,52 +92,97 @@ function Cover() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Join us today
+            Bem vindo
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your email and password to register
+            Digite seu email e senha para cadastrar-se
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="text" label="Name" variant="standard" fullWidth />
+              <MDInput
+                type="text"
+                label="Nome"
+                variant="standard"
+                fullWidth
+                value={name}
+                onChange={handleNameChange}
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput
+                type="email"
+                label="Email"
+                variant="standard"
+                fullWidth
+                value={email}
+                onChange={handleEmailChange}
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
+              <MDInput
+                type={showPassword ? "text" : "password"}
+                label="Senha"
+                variant="standard"
+                fullWidth
+                value={password}
+                onChange={handlePasswordChange}
+              />
+            </MDBox>
+            <MDBox display="flex" alignItems="center" ml={-2}>
+              <Switch cheched={showPassword} onChange={handleShowPassword} color="primary" />
+              <MDTypography
+                variant="button"
+                fontWeight="regular"
+                color="text"
+                onClick={handleShowPassword}
+                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
+              >
+                &nbsp;&nbsp;Mostrar senha
+              </MDTypography>
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
-              <Checkbox />
+              <Checkbox onChange={handleTermsAccepted} />
               <MDTypography
                 variant="button"
                 fontWeight="regular"
                 color="text"
                 sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
               >
-                &nbsp;&nbsp;I agree the&nbsp;
+                &nbsp;&nbsp;Aceito os&nbsp;
               </MDTypography>
               <MDTypography
-                component="a"
-                href="#"
                 variant="button"
                 fontWeight="bold"
                 color="info"
                 textGradient
+                onClick={handleOpenModal}
               >
-                Terms and Conditions
+                Termos e Condições
               </MDTypography>
+              <TermsAndConditionsModal
+                open={open}
+                onClose={handleCloseModal}
+                onAccept={handleTermsAccepted2}
+                checkboxChecked={modalTermsAccepted}
+                setCheckboxChecked={setModalTermsAccepted}
+                isChecked={modalTermsAccepted}
+              />
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+              <MDButton
+                variant="gradient"
+                color="info"
+                fullWidth
+                onClick={() => registerUser(name, email, password, termsAccepted)}
+              >
+                Cadastrar
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
-                Already have an account?{" "}
+                Já tem um conta?{" "}
                 <MDTypography
                   component={Link}
                   to="/authentication/sign-in"
@@ -102,14 +191,14 @@ function Cover() {
                   fontWeight="medium"
                   textGradient
                 >
-                  Sign In
+                  Faça Login
                 </MDTypography>
               </MDTypography>
             </MDBox>
           </MDBox>
         </MDBox>
       </Card>
-    </CoverLayout>
+    </BasicLayout>
   );
 }
 

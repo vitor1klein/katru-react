@@ -83,6 +83,15 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Reports",
+    key: "reports",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/reports",
+    component: <RTL />,
+    collapse: ["teste1", "teste2"],
+  },
+  {
+    type: "collapse",
     name: "Notifications",
     key: "notifications",
     icon: <Icon fontSize="small">notifications</Icon>,
