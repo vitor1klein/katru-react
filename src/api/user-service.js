@@ -16,10 +16,7 @@ export const getUserData = async (userId) => {
   }
 };
 
-export const registerUser = async (name, email, password, termsAccepted) => {
-  if (!termsAccepted) {
-    throw new Error("Você precisa aceitar os termos e condições para se cadastrar.");
-  }
+export const registerUser = async (name, email, password) => {
   try {
     const userData = {
       name,

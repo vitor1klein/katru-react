@@ -28,6 +28,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import MDAlert from "components/MDAlert";
 
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
@@ -47,6 +48,7 @@ function Cover() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [modalTermsAccepted, setModalTermsAccepted] = useState(false);
   const [open, setOpen] = useState(false);
+  const [alertMessageVisible, setAlertMessage] = useState(false);
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -77,9 +79,46 @@ function Cover() {
     setOpen(false);
   };
 
+  const alertContent = (description) => (
+    <MDTypography variant="body2" color="white">
+      ALERTA: {description}
+      <MDTypography component="a" href="#" variant="body2" fontWeight="medium" color="white">
+        link
+      </MDTypography>
+    </MDTypography>
+  );
+
+  const handleRegistration = async (userName, userEmail, userPassword, userTermsAccepted) => {
+    console.log(userName, userEmail, userPassword, userTermsAccepted);
+    if (!userTermsAccepted) {
+      console.log("ERRO termo de compromisso");
+      setAlertMessage(true);
+      alertContent("Termo de compromisso deve ser aceito.");
+      return;
+    }
+    try {
+      await registerUser(userName, userEmail, userPassword);
+    } catch (error) {
+      if (error.message === "Email is already registered in the system.") {
+        console.log("ERRO email já cadastrado");
+        alertContent("Email já está cadastrado no sistema.");
+        setAlertMessage(true);
+      } else {
+        console.log("ERRO falha ao cadastrar usuário");
+        alertContent("Falha ao cadastrar usuário.");
+        setAlertMessage(true);
+      }
+    }
+  };
+
   return (
     <BasicLayout image={bgImage}>
       <Card>
+        {alertMessageVisible && (
+          <MDAlert color="primary" dismissible>
+            {alertContent()}
+          </MDAlert>
+        )}
         <MDBox
           variant="gradient"
           bgColor="info"
@@ -175,7 +214,7 @@ function Cover() {
                 variant="gradient"
                 color="info"
                 fullWidth
-                onClick={() => registerUser(name, email, password, termsAccepted)}
+                onClick={() => handleRegistration(name, email, password, termsAccepted)}
               >
                 Cadastrar
               </MDButton>

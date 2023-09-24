@@ -62,27 +62,11 @@
 
 // export default TermsAndConditionsModal;
 
-import { Modal, Box, Typography, Button, Checkbox } from "@mui/material";
+import { Modal, Box, Typography } from "@mui/material";
+import MDBox from "components/MDBox";
+import MDButton from "components/MDButton";
 
-// eslint-disable-next-line react/prop-types
-function TermsAndConditionsModal({
-  open,
-  onClose,
-  onAccept,
-  checkboxChecked,
-  setCheckboxChecked,
-  isChecked,
-}) {
-  const handleModalCheckboxChange = (event) => {
-    setCheckboxChecked(event.target.checked);
-  };
-
-  const handleAccept = () => {
-    if (isChecked) {
-      onAccept();
-    }
-  };
-
+function TermsAndConditionsModal({ open, onClose }) {
   return (
     <Modal open={open} onClose={onClose}>
       <Box
@@ -106,20 +90,11 @@ function TermsAndConditionsModal({
           permitido o uso de ferramentas de terceiros para realizar ações no portal. 3. Não é
           permitido compartilhar sua senha com terceiros.
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Checkbox checked={checkboxChecked} onChange={handleModalCheckboxChange} />
-          <Typography variant="body1" gutterBottom>
-            Eu li e aceito os termos e condições
-          </Typography>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-          <Button variant="outlined" onClick={onClose} sx={{ mr: 2 }}>
-            Cancelar
-          </Button>
-          <Button variant="contained" onClick={handleAccept} disable={!isChecked}>
-            Aceitar
-          </Button>
-        </Box>
+        <MDBox mt={4} mb={1}>
+          <MDButton variant="gradient" color="info" onClick={onClose} fullWidth>
+            Voltar
+          </MDButton>
+        </MDBox>
       </Box>
     </Modal>
   );
