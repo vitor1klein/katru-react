@@ -85,10 +85,14 @@ function TermsAndConditionsModal({ open, onClose }) {
           Termos e Condições
         </Typography>
         <Typography variant="body1" gutterBottom>
-          Registrando-se ao portal da Katru voce aceita os seguintes termos:1. Não é permitido bots
-          bots ou qualquer outro tipo de automação para realizar ações no portal. 2. Não é permitido
-          permitido o uso de ferramentas de terceiros para realizar ações no portal. 3. Não é
-          permitido compartilhar sua senha com terceiros.
+          Registrando-se ao portal da Katru voce aceita os seguintes termos:
+          <br />
+          1. Não é permitido bots ou qualquer outro tipo de automação para realizar ações no portal.
+          <br />
+          2. Não é permitido o uso de ferramentas de terceiros para realizar ações no portal.
+          <br />
+          3. Não é permitido compartilhar sua senha com terceiros e outros usuários.
+          <br />
         </Typography>
         <MDBox mt={4} mb={1}>
           <MDButton variant="gradient" color="info" onClick={onClose} fullWidth>

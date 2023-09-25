@@ -48,7 +48,8 @@ function Cover() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [modalTermsAccepted, setModalTermsAccepted] = useState(false);
   const [open, setOpen] = useState(false);
-  const [alertMessageVisible, setAlertMessage] = useState(false);
+  const [alertMessageVisible, setAlertMessageVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null);
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -70,6 +71,7 @@ function Cover() {
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+  // corrigir aqui o terms accepted pois só estou utilizando 1
   const handleTermsAccepted = (event) => {
     setTermsAccepted(event.target.checked);
   };
@@ -79,34 +81,35 @@ function Cover() {
     setOpen(false);
   };
 
+  const handleAlertMessage = () => {
+    setAlertMessageVisible(false);
+  };
+
   const alertContent = (description) => (
     <MDTypography variant="body2" color="white">
-      ALERTA: {description}
-      <MDTypography component="a" href="#" variant="body2" fontWeight="medium" color="white">
-        link
-      </MDTypography>
+      {description}
     </MDTypography>
   );
 
   const handleRegistration = async (userName, userEmail, userPassword, userTermsAccepted) => {
-    console.log(userName, userEmail, userPassword, userTermsAccepted);
     if (!userTermsAccepted) {
-      console.log("ERRO termo de compromisso");
-      setAlertMessage(true);
-      alertContent("Termo de compromisso deve ser aceito.");
+      const errorMessage = "Termo de compromisso deve ser aceito.";
+      setAlertMessage(errorMessage);
+      setAlertMessageVisible(true);
       return;
     }
     try {
       await registerUser(userName, userEmail, userPassword);
     } catch (error) {
+      console.log(error);
       if (error.message === "Email is already registered in the system.") {
-        console.log("ERRO email já cadastrado");
-        alertContent("Email já está cadastrado no sistema.");
-        setAlertMessage(true);
+        const errorMessage = "Email já está cadastrado no sistema.";
+        setAlertMessage(errorMessage);
+        setAlertMessageVisible(true);
       } else {
-        console.log("ERRO falha ao cadastrar usuário");
-        alertContent("Falha ao cadastrar usuário.");
-        setAlertMessage(true);
+        const errorMessage = "Falha ao cadastrar usuário.";
+        setAlertMessage(errorMessage);
+        setAlertMessageVisible(true);
       }
     }
   };
@@ -115,8 +118,8 @@ function Cover() {
     <BasicLayout image={bgImage}>
       <Card>
         {alertMessageVisible && (
-          <MDAlert color="primary" dismissible>
-            {alertContent()}
+          <MDAlert color="warning" dismissible onClose={handleAlertMessage}>
+            {alertContent(alertMessage)}
           </MDAlert>
         )}
         <MDBox

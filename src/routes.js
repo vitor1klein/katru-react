@@ -41,7 +41,6 @@ import Tabelas from "layouts/tabelas";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
-import Notifications from "layouts/notifications";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -85,14 +84,6 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
-  },
-  {
-    type: "collapse",
-    name: "Notificações",
-    key: "notification",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/notification",
-    component: <Notifications />,
   },
 ];
 

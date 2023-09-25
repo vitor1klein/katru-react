@@ -110,11 +110,11 @@ function DefaultNavbar({ transparent, light, action }) {
           pl={{ xs: 0, lg: 1 }}
         >
           <MDTypography variant="button" fontWeight="bold" color={light ? "white" : "dark"}>
-            Katru Dashboard
+            Katru Portal
           </MDTypography>
         </MDBox>
         <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
-          <DefaultNavbarLink icon="info" name="About Us" route="/about-us" light={light} />
+          <DefaultNavbarLink icon="info" name="Sobre Nós" route="/about-us" light={light} />
           {/* <DefaultNavbarLink icon="person" name="profile" route="/profile" light={light} /> */}
           {/* <DefaultNavbarLink
             icon="account_circle"
