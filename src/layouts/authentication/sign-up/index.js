@@ -14,9 +14,8 @@ Coded by www.creative-tim.com
 */
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-// import { useHistory} from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -50,6 +49,7 @@ function Cover() {
   const [open, setOpen] = useState(false);
   const [alertMessageVisible, setAlertMessageVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
+  const navigate = useNavigate();
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -100,10 +100,10 @@ function Cover() {
     }
     try {
       await registerUser(userName, userEmail, userPassword);
+      navigate("/authentication/reset-password");
     } catch (error) {
-      console.log(error);
-      if (error.message === "Email is already registered in the system.") {
-        const errorMessage = "Email já está cadastrado no sistema.";
+      if (error.response.data.type === "userAlreadyExists") {
+        const errorMessage = error.response.data.message;
         setAlertMessage(errorMessage);
         setAlertMessageVisible(true);
       } else {

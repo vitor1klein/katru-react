@@ -41,6 +41,8 @@ import Tabelas from "layouts/tabelas";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import ResetPassword from "layouts/authentication/forgot-password";
+import UpdatePassword from "layouts/authentication/update-password";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -84,6 +86,22 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
+  },
+  {
+    type: "collapse",
+    name: "Esqueci a Senha",
+    key: "forgot-password",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/authentication/forgot-password",
+    component: <ResetPassword />,
+  },
+  {
+    type: "collapse",
+    name: "Atualizar Senha",
+    key: "update-password",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/authentication/update-password",
+    component: <UpdatePassword />,
   },
 ];
 

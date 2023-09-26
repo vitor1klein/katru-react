@@ -15,6 +15,7 @@ Coded by www.creative-tim.com
 
 // @mui material components
 import Card from "@mui/material/Card";
+import { Link } from "react-router-dom";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -23,14 +24,15 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 
 // Authentication layout components
-import CoverLayout from "layouts/authentication/components/CoverLayout";
+// import CoverLayout from "layouts/authentication/components/CoverLayout";
+import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
-import bgImage from "assets/images/bg-reset-cover.jpeg";
+import bgImage from "assets/images/background.jpg";
 
 function Cover() {
   return (
-    <CoverLayout coverHeight="50vh" image={bgImage}>
+    <BasicLayout coverHeight="50vh" image={bgImage}>
       <Card>
         <MDBox
           variant="gradient"
@@ -43,11 +45,13 @@ function Cover() {
           mb={1}
           textAlign="center"
         >
-          <MDTypography variant="h3" fontWeight="medium" color="white" mt={1}>
-            Reset Password
+          <MDTypography variant="h5" fontWeight="medium" color="white" mt={1}>
+            Esqueci minha Senha
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            You will receive an e-mail in maximum 60 seconds
+            Adicione seu email abaixo para recuperar sua senha.
+            <br />
+            Você receberá um link em sua caixa de entrada.
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
@@ -57,13 +61,28 @@ function Cover() {
             </MDBox>
             <MDBox mt={6} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth>
-                reset
+                Recuperar Senha
               </MDButton>
             </MDBox>
           </MDBox>
         </MDBox>
+        <MDBox mt={3} mb={1} textAlign="center">
+          <MDTypography variant="button" color="text">
+            Lembrou a senha?{" "}
+            <MDTypography
+              component={Link}
+              to="/authentication/sign-in"
+              variant="button"
+              color="info"
+              fontWeight="medium"
+              textGradient
+            >
+              Faça Login
+            </MDTypography>
+          </MDTypography>
+        </MDBox>
       </Card>
-    </CoverLayout>
+    </BasicLayout>
   );
 }
 
