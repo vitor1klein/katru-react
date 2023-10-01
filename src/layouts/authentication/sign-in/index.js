@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
@@ -9,21 +9,75 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import MDAlert from "components/MDAlert";
 
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 import bgImage from "assets/images/background.jpg";
 
+import { getUserToken } from "api/user-service";
+
 function Basic() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertMessageVisible, setAlertMessageVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const handleShowPassword = () => setShowPassword(!showPassword);
 
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleAlertMessage = () => {
+    setAlertMessageVisible(false);
+  };
+
+  const alertContent = (description) => (
+    <MDTypography variant="body2" color="white">
+      {description}
+    </MDTypography>
+  );
+
+  const handleLogin = async (userEmail, userPassword) => {
+    try {
+      const token = await getUserToken(userEmail, userPassword);
+      console.log("entrou aqui 1;");
+      sessionStorage.setItem("token", token);
+      console.log("entrou aqui 2;");
+      navigate("/dashboard");
+      console.log("entrou aqui 3;");
+    } catch (error) {
+      const errorTypes = ["invalidLogin", "userNotActive"];
+      if (errorTypes.includes(error.response.data.type)) {
+        const errorMessage = error.response.data.message;
+        setAlertMessage(errorMessage);
+        setAlertMessageVisible(true);
+      } else {
+        const errorMessage =
+          "Falha ao realizar login. Por favor, contate o admnistrador do sistema.";
+        setAlertMessage(errorMessage);
+        setAlertMessageVisible(true);
+      }
+    }
+  };
+
   return (
     <BasicLayout image={bgImage}>
       <Card>
+        {alertMessageVisible && (
+          <MDAlert color="warning" dismissible onClose={handleAlertMessage}>
+            {alertContent(alertMessage)}
+          </MDAlert>
+        )}
         <MDBox
           variant="gradient"
           bgColor="info"
@@ -42,10 +96,22 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2} ml={0}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput
+                type="email"
+                label="Email"
+                fullWidth
+                value={email}
+                onChange={handleEmailChange}
+              />
             </MDBox>
             <MDBox mb={1} ml={0}>
-              <MDInput type={showPassword ? "text" : "password"} label="Senha" fullWidth />
+              <MDInput
+                type={showPassword ? "text" : "password"}
+                label="Senha"
+                fullWidth
+                value={password}
+                onChange={handlePasswordChange}
+              />
               <Switch cheched={showPassword} onChange={handleShowPassword} color="primary" />
               <MDTypography
                 variant="button"
@@ -69,12 +135,27 @@ function Basic() {
                 &nbsp;&nbsp;Lembrar-me
               </MDTypography>
             </MDBox>
-            <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+            <MDBox mt={-5} mb={3} textAlign="right">
+              <MDTypography
+                component={Link}
+                to="/authentication/forgot-password"
+                variant="button"
+                fontWeight="light"
+              >
+                Esqueci minha senha
+              </MDTypography>
+            </MDBox>
+            <MDBox mt={1} mb={1}>
+              <MDButton
+                variant="gradient"
+                color="info"
+                fullWidth
+                onClick={() => handleLogin(email, password)}
+              >
                 Entrar
               </MDButton>
             </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
+            <MDBox mt={2} mb={1} textAlign="center">
               <MDTypography variant="button" fontWeight="regular" color="text">
                 Ainda não tem uma conta?{" "}
                 <MDTypography

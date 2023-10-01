@@ -16,6 +16,24 @@ export const getUserData = async (userId) => {
   }
 };
 
+export const getUserToken = async (email, password) => {
+  try {
+    const loginData = {
+      email,
+      password,
+    };
+    const response = await API.post(`users/create-token`, loginData);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      throw error;
+    } else {
+      console.log(error);
+      throw new Error("Erro durante login.");
+    }
+  }
+};
+
 export const registerUser = async (name, email, password) => {
   try {
     const userData = {
@@ -27,6 +45,10 @@ export const registerUser = async (name, email, password) => {
     const response = await API.post(`users/register`, userData);
     return response.userData;
   } catch (error) {
-    throw new Error("Erro durante o cadastro do usuário: ", error);
+    if (error.response && error.response.data) {
+      throw error;
+    } else {
+      throw new Error("Erro durante o cadastro do usuário.");
+    }
   }
 };

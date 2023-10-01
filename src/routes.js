@@ -43,10 +43,21 @@ import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import ResetPassword from "layouts/authentication/forgot-password";
 import UpdatePassword from "layouts/authentication/update-password";
+import Admin from "layouts/admin";
+
 // @mui icons
 import Icon from "@mui/material/Icon";
 
 const routes = [
+  {
+    type: "collapse",
+    name: "Admin",
+    key: "admin",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/admin",
+    component: <Admin />,
+    protected: true,
+  },
   {
     type: "collapse",
     name: "Dashboard",
@@ -54,6 +65,7 @@ const routes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: <Dashboard />,
+    protected: true,
   },
   {
     type: "collapse",
@@ -62,6 +74,7 @@ const routes = [
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/tabelas",
     component: <Tabelas />,
+    protected: true,
   },
   {
     type: "collapse",
@@ -70,6 +83,7 @@ const routes = [
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",
     component: <Profile />,
+    protected: true,
   },
   {
     type: "collapse",
@@ -78,6 +92,7 @@ const routes = [
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
     component: <SignIn />,
+    protected: false,
   },
   {
     type: "collapse",
@@ -86,6 +101,7 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
+    protected: false,
   },
   {
     type: "collapse",
@@ -94,6 +110,7 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/forgot-password",
     component: <ResetPassword />,
+    protected: false,
   },
   {
     type: "collapse",
@@ -102,6 +119,7 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/update-password",
     component: <UpdatePassword />,
+    protected: false,
   },
 ];
 
