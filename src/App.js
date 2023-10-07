@@ -47,6 +47,7 @@ import createCache from "@emotion/cache";
 import menu from "routes/menu";
 import routes from "routes";
 
+// import AuthProvider from "utils/AuthProvider";
 import PrivateRoute from "utils/PrivateRoute";
 
 // Material Dashboard 2 React contexts
@@ -121,7 +122,6 @@ export default function App() {
 
       if (route.route) {
         if (route.protected) {
-          console.log("Route protected: ", route.name);
           return (
             <Route exact path="/" element={<PrivateRoute />}>
               <Route exact path={route.route} element={route.component} key={route.key} />
@@ -201,14 +201,16 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
+      {/* <AuthProvider> */}
       <Routes>
         {getRoutes(routes, isAuthenticated)}
         {/* <Route exact path="/" element={<PrivateRoute />}>
           <Route exact path="/profile" element={<Profile />} />
-        </Route>
+          </Route>
         <Route path="/sign-in" element={<SignIn />} /> */}
         <Route path="*" element={<Navigate to="/sign-in" />} />
       </Routes>
+      {/* </AuthProvider> */}
     </ThemeProvider>
   );
 }
