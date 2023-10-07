@@ -125,7 +125,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleLogout = () => {
     sessionStorage.clear();
     console.log("Logging out.");
-    navigate("/authentication/sign-in");
+    navigate("/sign-in");
   };
 
   return (

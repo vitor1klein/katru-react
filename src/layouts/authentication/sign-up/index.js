@@ -101,7 +101,7 @@ function Cover() {
     try {
       await registerUser(userName, userEmail, userPassword);
       // adapt to login page with an alert that the user will receive a confirmation email
-      navigate("/authentication/reset-password");
+      navigate("/reset-password");
     } catch (error) {
       if (error.response.data.type === "userAlreadyExists") {
         const errorMessage = error.response.data.message;
@@ -228,7 +228,7 @@ function Cover() {
                 Já tem um conta?{" "}
                 <MDTypography
                   component={Link}
-                  to="/authentication/sign-in"
+                  to="/sign-in"
                   variant="button"
                   color="info"
                   fontWeight="medium"

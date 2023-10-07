@@ -44,7 +44,10 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
 // Material Dashboard 2 React routes
-import routes from "routes/menu";
+import menu from "routes/menu";
+import routes from "routes";
+
+import PrivateRoute from "utils/PrivateRoute";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -68,6 +71,7 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
+  const isAuthenticated = true;
 
   // Cache for the rtl
   useMemo(() => {
@@ -109,13 +113,21 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) =>
+  const getRoutes = (allRoutes, user) =>
     allRoutes.map((route) => {
       if (route.collapse) {
-        return getRoutes(route.collapse);
+        return getRoutes(route.collapse, user);
       }
 
       if (route.route) {
+        if (route.protected) {
+          console.log("Route protected: ", route.name);
+          return (
+            <Route exact path="/" element={<PrivateRoute />}>
+              <Route exact path={route.route} element={route.component} key={route.key} />
+            </Route>
+          );
+        }
         return <Route exact path={route.route} element={route.component} key={route.key} />;
       }
 
@@ -155,8 +167,8 @@ export default function App() {
             <Sidenav
               color={sidenavColor}
               brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName="KATRU"
-              routes={routes}
+              brandName="KATRU RTL"
+              routes={menu}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
             />
@@ -166,7 +178,7 @@ export default function App() {
         )}
         {layout === "vr" && <Configurator />}
         <Routes>
-          {getRoutes(routes)}
+          {getRoutes(routes, isAuthenticated)}
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </ThemeProvider>
@@ -180,7 +192,7 @@ export default function App() {
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
             brandName="KATRU"
-            routes={routes}
+            routes={menu}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
@@ -190,8 +202,12 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        {getRoutes(routes, isAuthenticated)}
+        {/* <Route exact path="/" element={<PrivateRoute />}>
+          <Route exact path="/profile" element={<Profile />} />
+        </Route>
+        <Route path="/sign-in" element={<SignIn />} /> */}
+        <Route path="*" element={<Navigate to="/sign-in" />} />
       </Routes>
     </ThemeProvider>
   );

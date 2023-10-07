@@ -123,7 +123,7 @@ function Cover() {
             Lembrou a senha?{" "}
             <MDTypography
               component={Link}
-              to="/authentication/sign-in"
+              to="/sign-in"
               variant="button"
               color="info"
               fontWeight="medium"
