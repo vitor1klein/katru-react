@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useState, useEffect } from "react";
 
 // react-router components
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -58,6 +58,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Setting the navbar type
@@ -121,6 +122,12 @@ function DashboardNavbar({ absolute, light, isMini }) {
     },
   });
 
+  const handleLogout = () => {
+    sessionStorage.clear();
+    console.log("Logging out.");
+    navigate("/authentication/sign-in");
+  };
+
   return (
     <AppBar
       position={absolute ? "absolute" : navbarType}
@@ -154,11 +161,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
               >
                 <Icon sx={iconsStyle}>settings</Icon>
               </IconButton>
-              <Link to="/profile">
-                <IconButton sx={navbarIconButton} size="small" disableRipple>
-                  <Icon sx={iconsStyle}>logout</Icon>
-                </IconButton>
-              </Link>
+
+              <IconButton sx={navbarIconButton} size="small" disableRipple onClick={handleLogout}>
+                <Icon sx={iconsStyle}>logout</Icon>
+              </IconButton>
 
               {renderMenu()}
             </MDBox>

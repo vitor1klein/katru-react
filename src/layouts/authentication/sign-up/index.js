@@ -37,7 +37,7 @@ import TermsAndConditionsModal from "layouts/authentication/sign-up/terms_condit
 import bgImage from "assets/images/background.jpg";
 
 // Services
-import { registerUser } from "api/user-service";
+import { registerUser } from "api/auth-service";
 
 function Cover() {
   const [email, setEmail] = useState("");
@@ -100,6 +100,7 @@ function Cover() {
     }
     try {
       await registerUser(userName, userEmail, userPassword);
+      // adapt to login page with an alert that the user will receive a confirmation email
       navigate("/authentication/reset-password");
     } catch (error) {
       if (error.response.data.type === "userAlreadyExists") {
@@ -173,7 +174,7 @@ function Cover() {
               />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-2}>
-              <Switch cheched={showPassword} onChange={handleShowPassword} color="primary" />
+              <Switch checked={showPassword} onChange={handleShowPassword} color="primary" />
               <MDTypography
                 variant="button"
                 fontWeight="regular"

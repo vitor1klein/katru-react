@@ -44,7 +44,7 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
 // Material Dashboard 2 React routes
-import routes from "routes";
+import routes from "routes/menu";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -52,7 +52,6 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
-import { isTokenValid } from "api/token-service";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -69,9 +68,6 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
-  const token = sessionStorage.getItem("token");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [error, setError] = useState(null);
 
   // Cache for the rtl
   useMemo(() => {
@@ -113,24 +109,6 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  // Check authentication status when the component mounts
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        const checkToken = await isTokenValid(token);
-        setIsAuthenticated(checkToken);
-      } catch (e) {
-        setError(e);
-      }
-    };
-
-    checkAuthentication();
-  }, [token]);
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
       if (route.collapse) {
@@ -138,13 +116,7 @@ export default function App() {
       }
 
       if (route.route) {
-        const element =
-          route.protected && !isAuthenticated.data ? (
-            <Navigate to="/authentication/sign-in" replace />
-          ) : (
-            route.component
-          );
-        return <Route exact path={route.route} element={element} key={route.key} />;
+        return <Route exact path={route.route} element={route.component} key={route.key} />;
       }
 
       return null;
@@ -183,7 +155,7 @@ export default function App() {
             <Sidenav
               color={sidenavColor}
               brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName="Material Dashboard 3"
+              brandName="KATRU"
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}

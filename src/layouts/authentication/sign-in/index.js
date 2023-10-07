@@ -15,7 +15,7 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 import bgImage from "assets/images/background.jpg";
 
-import { getUserToken } from "api/user-service";
+import { getUserToken } from "api/auth-service";
 
 function Basic() {
   const [email, setEmail] = useState("");
@@ -50,11 +50,8 @@ function Basic() {
   const handleLogin = async (userEmail, userPassword) => {
     try {
       const token = await getUserToken(userEmail, userPassword);
-      console.log("entrou aqui 1;");
       sessionStorage.setItem("token", token);
-      console.log("entrou aqui 2;");
       navigate("/dashboard");
-      console.log("entrou aqui 3;");
     } catch (error) {
       const errorTypes = ["invalidLogin", "userNotActive"];
       if (errorTypes.includes(error.response.data.type)) {
@@ -112,7 +109,7 @@ function Basic() {
                 value={password}
                 onChange={handlePasswordChange}
               />
-              <Switch cheched={showPassword} onChange={handleShowPassword} color="primary" />
+              <Switch checked={showPassword} onChange={handleShowPassword} color="primary" />
               <MDTypography
                 variant="button"
                 fontWeight="regular"

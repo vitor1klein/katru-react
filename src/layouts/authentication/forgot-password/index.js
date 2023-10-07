@@ -22,6 +22,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import MDAlert from "components/MDAlert";
 
 // Authentication layout components
 // import CoverLayout from "layouts/authentication/components/CoverLayout";
@@ -30,10 +31,50 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 // Images
 import bgImage from "assets/images/background.jpg";
 
+import { forgotPassword } from "api/auth-service";
+import { useState } from "react";
+
 function Cover() {
+  const [email, setEmail] = useState("");
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertMessageVisible, setAlertMessageVisible] = useState(false);
+  const successfulMessage =
+    "Um email para recuperação de senha foi enviado à sua caixa de mensagem. Favor seguir instruções enviadas no email.";
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleAlertMessage = () => {
+    setAlertMessageVisible(false);
+  };
+
+  const alertContent = (description) => (
+    <MDTypography variant="body2" color="white">
+      {description}
+    </MDTypography>
+  );
+
+  const handleForgotPassword = async (userEmail) => {
+    try {
+      const response = await forgotPassword(userEmail);
+      console.log(response);
+      setAlertMessage(successfulMessage);
+      setAlertMessageVisible(true);
+    } catch (error) {
+      setAlertMessage(error.message);
+      setAlertMessageVisible(true);
+    }
+  };
+
   return (
     <BasicLayout coverHeight="50vh" image={bgImage}>
       <Card>
+        {alertMessageVisible && (
+          <MDAlert color="warning" dismissible onClose={handleAlertMessage}>
+            {alertContent(alertMessage)}
+          </MDAlert>
+        )}
         <MDBox
           variant="gradient"
           bgColor="info"
@@ -57,10 +98,21 @@ function Cover() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={4}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput
+                type="email"
+                label="Email"
+                fullWidth
+                value={email}
+                onChange={handleEmailChange}
+              />
             </MDBox>
             <MDBox mt={6} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton
+                variant="gradient"
+                color="info"
+                fullWidth
+                onClick={() => handleForgotPassword(email)}
+              >
                 Recuperar Senha
               </MDButton>
             </MDBox>
