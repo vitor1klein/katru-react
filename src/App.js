@@ -72,7 +72,6 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
-  const isAuthenticated = true;
 
   // Cache for the rtl
   useMemo(() => {
@@ -114,17 +113,17 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes, user) =>
+  const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
       if (route.collapse) {
-        return getRoutes(route.collapse, user);
+        return getRoutes(route.collapse);
       }
 
       if (route.route) {
         if (route.protected) {
           return (
-            <Route exact path="/" element={<PrivateRoute />}>
-              <Route exact path={route.route} element={route.component} key={route.key} />
+            <Route exact path="/" element={<PrivateRoute />} key={route.key}>
+              <Route exact path={route.route} element={route.component} />
             </Route>
           );
         }
@@ -178,7 +177,7 @@ export default function App() {
         )}
         {layout === "vr" && <Configurator />}
         <Routes>
-          {getRoutes(routes, isAuthenticated)}
+          {getRoutes(routes)}
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </ThemeProvider>
@@ -201,16 +200,10 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
-      {/* <AuthProvider> */}
       <Routes>
-        {getRoutes(routes, isAuthenticated)}
-        {/* <Route exact path="/" element={<PrivateRoute />}>
-          <Route exact path="/profile" element={<Profile />} />
-          </Route>
-        <Route path="/sign-in" element={<SignIn />} /> */}
+        {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/sign-in" />} />
       </Routes>
-      {/* </AuthProvider> */}
     </ThemeProvider>
   );
 }
