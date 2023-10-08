@@ -119,18 +119,20 @@ export default function App() {
         return getRoutes(route.collapse);
       }
 
-      if (route.route) {
-        if (route.protected) {
-          return (
-            <Route exact path="/" element={<PrivateRoute />} key={route.key}>
-              <Route exact path={route.route} element={route.component} />
-            </Route>
-          );
-        }
+      if (route.public) {
         return <Route exact path={route.route} element={route.component} key={route.key} />;
       }
 
-      return null;
+      return (
+        <Route
+          exact
+          path="/"
+          element={<PrivateRoute roleRequired={route.roleRequired} />}
+          key={route.key}
+        >
+          <Route exact path={route.route} element={route.component} />
+        </Route>
+      );
     });
 
   const configsButton = (

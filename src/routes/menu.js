@@ -53,6 +53,7 @@ const routes = [
     route: "/admin",
     component: <Admin />,
     protected: true,
+    adminOnly: true,
   },
   {
     type: "collapse",
@@ -62,6 +63,7 @@ const routes = [
     route: "/profile",
     component: <Profile />,
     protected: true,
+    adminOnly: false,
   },
   {
     type: "collapse",
@@ -71,6 +73,7 @@ const routes = [
     route: "/dashboard",
     component: <Dashboard />,
     protected: true,
+    adminOnly: false,
   },
   {
     type: "collapse",
@@ -80,6 +83,7 @@ const routes = [
     route: "/tabelas",
     component: <Tabelas />,
     protected: true,
+    adminOnly: false,
   },
 ];
 

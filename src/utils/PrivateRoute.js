@@ -1,38 +1,53 @@
 // PrivateRoute.js
 import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { isTokenValid } from "api/auth-service"; // Import your token validation function
+import { isTokenValid, getUserRole } from "api/auth-service"; // Import your token validation function
+import PropTypes from "prop-types";
 
-function PrivateRoute() {
+function PrivateRoute({ roleRequired }) {
   const [auth, setAuth] = useState(false); // Determine if authorized
+  const [userRole, setUserRole] = useState("");
   const [isLoading, setLoading] = useState(true); // Track loading state
 
   useEffect(() => {
-    const checkTokenValidity = async () => {
-      const token = sessionStorage.getItem("token"); // Get the token from sessionStorage
+    const token = sessionStorage.getItem("token");
 
-      if (token) {
-        try {
-          const isValid = await isTokenValid(token); // Validate the token on the backend
-          setAuth(isValid.data); // Set the authorization state based on the token validity
-        } catch (error) {
-          console.error("Error while checking token validity:", error);
-        } finally {
-          setLoading(false); // Set loading to false when token validation is complete
+    const checkTokenValidity = isTokenValid(token);
+    const checkUserRoleResponse = getUserRole(token);
+
+    Promise.all([checkTokenValidity, checkUserRoleResponse])
+      .then(([tokenValid, userRoleResponse]) => {
+        if (tokenValid.data && userRoleResponse.data) {
+          const rolesArray = userRoleResponse.data.split(",").map((role) => role.trim());
+          setUserRole(rolesArray);
+          setAuth(true);
+        } else {
+          setAuth(false);
         }
-      } else {
-        setLoading(false); // Set loading to false if no token is present
-      }
-    };
-
-    checkTokenValidity();
+      })
+      .catch((error) => {
+        console.error("Error while checking token validity or user role:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>; // You can add a loading indicator while checking the token
+    return <div>Loading...</div>;
   }
 
-  return auth ? <Outlet /> : <Navigate to="/sign-in" />;
+  const isValid = auth && userRole.includes(roleRequired);
+  console.log("USER ROLES: ", userRole);
+  console.log("ROLE REQUIRED ", roleRequired);
+  console.log("AUTH: ", auth);
+  console.log("IS VALID: ", isValid);
+
+  return isValid ? <Outlet /> : <Navigate to="/sign-in" />;
 }
+
+PrivateRoute.propTypes = {
+  roleRequired: PropTypes.string.isRequired, // You can adjust the prop type as needed
+};
 
 export default PrivateRoute;

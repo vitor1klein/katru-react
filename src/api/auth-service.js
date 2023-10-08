@@ -60,6 +60,14 @@ export const isTokenValid = async (userToken) => {
   }
 };
 
+export const getUserRole = async (userToken) => {
+  try {
+    return await API.get(`auth/get-user-role?token=${userToken}`);
+  } catch (error) {
+    throw new Error("Error fetching user data", error);
+  }
+};
+
 export const forgotPassword = async (email) => {
   try {
     const headers = {
