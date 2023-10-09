@@ -58,11 +58,11 @@ function Cover() {
   const handleForgotPassword = async (userEmail) => {
     try {
       const response = await forgotPassword(userEmail);
-      console.log(response);
+      console.log(response.data);
       setAlertMessage(successfulMessage);
       setAlertMessageVisible(true);
     } catch (error) {
-      setAlertMessage(error.message);
+      setAlertMessage(error.response.data);
       setAlertMessageVisible(true);
     }
   };

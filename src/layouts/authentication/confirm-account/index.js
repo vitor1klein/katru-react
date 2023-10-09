@@ -12,43 +12,32 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
-import Switch from "@mui/material/Switch";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import MDAlert from "components/MDAlert";
 
 // Authentication layout components
+// import CoverLayout from "layouts/authentication/components/CoverLayout";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
 import bgImage from "assets/images/background.jpg";
+import { confirmAccount } from "api/auth-service";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
-// API calls
-import { updatePassword } from "api/auth-service";
-
-function UpdatePassword() {
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+function ConfirmAccount() {
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertMessageVisible, setAlertMessageVisible] = useState(false);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
-
-  const handleShowPassword = () => setShowPassword(!showPassword);
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
 
   const handleAlertMessage = () => {
     setAlertMessageVisible(false);
@@ -60,17 +49,20 @@ function UpdatePassword() {
     </MDTypography>
   );
 
-  const handlePasswordUpdate = async (userToken, userPassword) => {
+  const handleConfirmAccount = async (userToken) => {
     try {
-      await updatePassword(userToken, userPassword);
-      setAlertMessage("Sua senha foi alterada com sucesso!");
+      const response = await confirmAccount(userToken);
+      console.log(response);
+      setAlertMessage("Sua conta foi confirmada com sucesso.");
       setAlertMessageVisible(true);
     } catch (error) {
-      const errorMessage =
-        "Erro durante atualização da senha. Por gentileza, fazer nova solicitação para recuperar o seu login.";
-      setAlertMessage(errorMessage);
+      setAlertMessage(error.response.data);
       setAlertMessageVisible(true);
     }
+  };
+
+  const handleSendNewToken = async () => {
+    console.log("Enviar novo token ao email do usuário.");
   };
 
   return (
@@ -93,43 +85,40 @@ function UpdatePassword() {
           textAlign="center"
         >
           <MDTypography variant="h5" fontWeight="medium" color="white" mt={1}>
-            Atualizar senha
-          </MDTypography>
-          <MDTypography display="block" variant="button" color="white" my={1}>
-            Por favor, adicione sua nova senha no campo abaixo.
+            Ativar sua conta
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
-            <MDBox mb={1} ml={0}>
-              <MDInput
-                type={showPassword ? "text" : "password"}
-                label="Senha"
-                fullWidth
-                value={password}
-                onChange={handlePasswordChange}
-              />
-              <Switch checked={showPassword} onChange={handleShowPassword} color="primary" />
-              <MDTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-                onClick={handleShowPassword}
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-              >
-                &nbsp;&nbsp;Mostrar senha
-              </MDTypography>
-            </MDBox>
-            <MDBox mt={6} mb={1}>
+            <MDTypography variant="button" color="text">
+              Clique no botão abaixo para ativar sua conta no Portal Katru.
+            </MDTypography>
+            <MDBox mt={3} mb={1}>
               <MDButton
                 variant="gradient"
                 color="info"
                 fullWidth
-                onClick={() => handlePasswordUpdate(token, password)}
+                onClick={() => handleConfirmAccount(token)}
               >
-                Atualizar
+                Confirmar email
               </MDButton>
             </MDBox>
+          </MDBox>
+          <br />
+          <MDBox mt={3} mb={1} textAlign="center">
+            <MDTypography variant="button" color="text">
+              Token expirou e precisa de um novo?
+              <br />
+              <MDButton
+                variant="button"
+                color="text"
+                fontWeight="small"
+                textGradient
+                onClick={() => handleSendNewToken()}
+              >
+                Envie um novo email
+              </MDButton>
+            </MDTypography>
           </MDBox>
         </MDBox>
       </Card>
@@ -137,4 +126,4 @@ function UpdatePassword() {
   );
 }
 
-export default UpdatePassword;
+export default ConfirmAccount;

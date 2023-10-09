@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // react-router-dom components
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
 // @mui material components
@@ -38,6 +38,7 @@ import bgImage from "assets/images/background.jpg";
 
 // Services
 import { registerUser } from "api/auth-service";
+import { validateEmail } from "utils/ValidationService";
 
 function Cover() {
   const [email, setEmail] = useState("");
@@ -49,7 +50,6 @@ function Cover() {
   const [open, setOpen] = useState(false);
   const [alertMessageVisible, setAlertMessageVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
-  const navigate = useNavigate();
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -92,26 +92,44 @@ function Cover() {
   );
 
   const handleRegistration = async (userName, userEmail, userPassword, userTermsAccepted) => {
+    if (!userName) {
+      setAlertMessage("Por favor, preencha seu nome.");
+      setAlertMessageVisible(true);
+      return;
+    }
     if (!userTermsAccepted) {
       const errorMessage = "Termo de compromisso deve ser aceito.";
       setAlertMessage(errorMessage);
       setAlertMessageVisible(true);
       return;
     }
+    if (!validateEmail(userEmail)) {
+      setAlertMessage("Email inválido. Por favor, adicione um email válido.");
+      setAlertMessageVisible(true);
+      return;
+    }
     try {
       await registerUser(userName, userEmail, userPassword);
-      // adapt to login page with an alert that the user will receive a confirmation email
-      navigate("/reset-password");
+      setAlertMessage(
+        "Usuário cadastrado com sucesso. Por gentileza, confirme seu email antes de fazer o login."
+      );
+      setAlertMessageVisible(true);
     } catch (error) {
       if (error.response.data.type === "userAlreadyExists") {
         const errorMessage = error.response.data.message;
         setAlertMessage(errorMessage);
         setAlertMessageVisible(true);
-      } else {
-        const errorMessage = "Falha ao cadastrar usuário.";
+        return;
+      }
+      if (error.response.data.type === "invalidPassword") {
+        const errorMessage = error.response.data.message;
         setAlertMessage(errorMessage);
         setAlertMessageVisible(true);
+        return;
       }
+      const errorMessage = "Falha ao cadastrar usuário.";
+      setAlertMessage(errorMessage);
+      setAlertMessageVisible(true);
     }
   };
 

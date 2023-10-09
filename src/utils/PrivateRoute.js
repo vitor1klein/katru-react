@@ -34,14 +34,19 @@ function PrivateRoute({ roleRequired }) {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner" />
+        <p>Carregando...</p>
+      </div>
+    );
   }
 
   const isValid = auth && userRole.includes(roleRequired);
-  console.log("USER ROLES: ", userRole);
-  console.log("ROLE REQUIRED ", roleRequired);
-  console.log("AUTH: ", auth);
-  console.log("IS VALID: ", isValid);
+
+  if (auth && !userRole.includes(roleRequired)) {
+    return <Navigate to="/unauthorized" />;
+  }
 
   return isValid ? <Outlet /> : <Navigate to="/sign-in" />;
 }

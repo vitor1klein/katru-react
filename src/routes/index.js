@@ -43,7 +43,9 @@ import Admin from "layouts/admin";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import ForgotPassword from "layouts/authentication/forgot-password";
+import ConfirmAccount from "layouts/authentication/confirm-account";
 import UpdatePassword from "layouts/authentication/update-password";
+import Unauthorized from "layouts/authentication/unauthorized";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -100,6 +102,13 @@ const routes = [
     public: true,
   },
   {
+    name: "Confirm Account",
+    key: "confirmAccount",
+    route: "/confirm-account",
+    component: <ConfirmAccount />,
+    public: true,
+  },
+  {
     name: "Forgot Password",
     key: "forgotPassword",
     route: "/forgot-password",
@@ -112,6 +121,13 @@ const routes = [
     route: "/update-password",
     component: <UpdatePassword />,
     public: true,
+  },
+  {
+    name: "Unauthorized",
+    key: "unauthorized",
+    route: "/unauthorized",
+    component: <Unauthorized />,
+    roleRequired: "ROLE_USER",
   },
 ];
 

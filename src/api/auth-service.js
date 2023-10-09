@@ -8,7 +8,7 @@ export const registerUser = async (name, email, password) => {
       password,
       roles: "ROLE_USER",
     };
-    const response = await API.post(`auth/register`, userData);
+    const response = await API.post(`auth/register-user`, userData);
     return response.userData;
   } catch (error) {
     if (error.response && error.response.data) {
@@ -31,7 +31,6 @@ export const getUserToken = async (email, password) => {
     if (error.response && error.response.data) {
       throw error;
     } else {
-      console.log(error);
       throw new Error("Erro durante login.");
     }
   }
@@ -74,13 +73,12 @@ export const forgotPassword = async (email) => {
       "Content-Type": "application/json",
       "Custom-Email-Header": email,
     };
-    const response = await API.post(`auth/forgot-password`, { headers });
+    const response = await API.post(`auth/forgot-password`, null, { headers });
     return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
       throw error;
     } else {
-      console.log(error);
       throw new Error("Erro durante recuperação de senha.");
     }
   }
@@ -101,7 +99,22 @@ export const updatePassword = async (userToken, userPassword) => {
     });
     console.log(response);
   } catch (error) {
-    console.log(error);
     throw new Error("Erro durante atualização da senha!");
+  }
+};
+
+export const confirmAccount = async (userToken) => {
+  try {
+    const apiParams = {
+      token: userToken,
+    };
+    const response = await API.post(`auth/confirm-account`, null, {
+      params: apiParams,
+    });
+    console.log(response);
+  } catch (error) {
+    throw new Error(
+      "Não foi possível confirmar sua conta. Por favor, solicite um novo token para confirmação."
+    );
   }
 };
