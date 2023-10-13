@@ -118,3 +118,17 @@ export const confirmAccount = async (userToken) => {
     );
   }
 };
+
+export const resendToken = async (userEmail) => {
+  try {
+    const apiParams = {
+      email: userEmail,
+    };
+    await API.post(`auth/resend-token`, null, { params: apiParams });
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      "Não foi possível enviar um novo token. Por favor, contate o adminstrador do sistema."
+    );
+  }
+};

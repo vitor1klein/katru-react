@@ -46,6 +46,7 @@ import ForgotPassword from "layouts/authentication/forgot-password";
 import ConfirmAccount from "layouts/authentication/confirm-account";
 import UpdatePassword from "layouts/authentication/update-password";
 import Unauthorized from "layouts/authentication/unauthorized";
+import ResendToken from "layouts/authentication/resend-token";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -120,6 +121,13 @@ const routes = [
     key: "updatePassword",
     route: "/update-password",
     component: <UpdatePassword />,
+    public: true,
+  },
+  {
+    name: "Resend Token",
+    key: "resendToken",
+    route: "/resend-token",
+    component: <ResendToken />,
     public: true,
   },
   {

@@ -21,23 +21,20 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import MDAlert from "components/MDAlert";
+import MDInput from "components/MDInput";
 
 // Authentication layout components
-// import CoverLayout from "layouts/authentication/components/CoverLayout";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
 import bgImage from "assets/images/background.jpg";
-import { confirmAccount } from "api/auth-service";
+import { resendToken } from "api/auth-service";
 import { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
 
-function ConfirmAccount() {
+function ResendToken() {
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertMessageVisible, setAlertMessageVisible] = useState(false);
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const token = searchParams.get("token");
+  const [email, setEmail] = useState("");
 
   const handleAlertMessage = () => {
     setAlertMessageVisible(false);
@@ -49,13 +46,19 @@ function ConfirmAccount() {
     </MDTypography>
   );
 
-  const handleConfirmAccount = async (userToken) => {
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleSendNewToken = async (userEmail) => {
     try {
-      console.log(userToken);
-      await confirmAccount(userToken);
-      setAlertMessage("Sua conta foi confirmada com sucesso.");
+      console.log("Chamando api com email ", userEmail);
+      const response = await resendToken(userEmail);
+      console.log(response);
+      setAlertMessage("Um novo email foi enviado para confirmar sua conta.");
       setAlertMessageVisible(true);
     } catch (error) {
+      console.log(error);
       setAlertMessage(error.message);
       setAlertMessageVisible(true);
     }
@@ -81,37 +84,34 @@ function ConfirmAccount() {
           textAlign="center"
         >
           <MDTypography variant="h5" fontWeight="medium" color="white" mt={1}>
-            Ativar sua conta
+            Reenviar email
           </MDTypography>
         </MDBox>
-        <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+        <MDBox pt={2} pb={3} px={3}>
+          <MDBox component="form" role="form" textAlign="center">
             <MDTypography variant="button" color="text">
-              Clique no botão abaixo para ativar sua conta no Portal Katru.
+              Insira o email cadastrado para receber um novo email de confirmação de sua conta:
             </MDTypography>
-            <MDBox mt={3} mb={1}>
+            <br />
+            <MDBox mb={5} ml={0}>
+              <MDInput
+                type="email"
+                label="Email"
+                fullWidth
+                value={email}
+                onChange={handleEmailChange}
+              />
+            </MDBox>
+            <MDBox mt={5} mb={1}>
               <MDButton
                 variant="gradient"
                 color="info"
                 fullWidth
-                onClick={() => handleConfirmAccount(token)}
+                onClick={() => handleSendNewToken(email)}
               >
-                Confirmar email
+                Enviar novo email
               </MDButton>
             </MDBox>
-          </MDBox>
-          <MDBox mt={2} mb={1} textAlign="center">
-            <MDTypography variant="button" fontWeight="regular" color="text">
-              Token não está mais ativo?{" "}
-              <MDTypography
-                component={Link}
-                to="/resend-token"
-                variant="button"
-                fontWeight="medium"
-              >
-                Peça um novo email
-              </MDTypography>
-            </MDTypography>
           </MDBox>
         </MDBox>
       </Card>
@@ -119,4 +119,4 @@ function ConfirmAccount() {
   );
 }
 
-export default ConfirmAccount;
+export default ResendToken;
