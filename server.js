@@ -29,6 +29,7 @@ app.use(
       imgSrc: ["'self'", "data:"],
       connectSrc: ["'self'", "https://portal-katru-backend-stg-45b34fb09c5c.herokuapp.com"],
       fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
+      frameAncestors: ["'self'", "https://portal-katru-stg-63b4d6c06427.herokuapp.com"],
     },
   })
 );
