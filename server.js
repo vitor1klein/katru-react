@@ -15,6 +15,7 @@ const app = express();
 // Configure the Content-Security-Policy header using the helmet-csp middleware
 app.use(
   helmet.contentSecurityPolicy({
+    useDefaults: true,
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
