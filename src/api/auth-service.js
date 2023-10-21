@@ -6,7 +6,6 @@ export const registerUser = async (name, email, password) => {
       name,
       email,
       password,
-      roles: "ROLE_USER",
     };
     const response = await API.post(`auth/register-user`, userData);
     return response.userData;
