@@ -8,7 +8,11 @@ app.use(
   helmet.contentSecurityPolicy({
     useDefaults: true,
     directives: {
-      defaultSrc: ["'self'", "'favicon.ico'"],
+      defaultSrc: [
+        "'self'",
+        "'favicon.ico'",
+        "https://portal-katru-backend-stg-45b34fb09c5c.herokuapp.com",
+      ],
       scriptSrc: ["'self'"],
       styleSrc: [
         "'self'",
