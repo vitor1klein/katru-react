@@ -37,7 +37,7 @@ Coded by www.creative-tim.com
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-import Tabelas from "layouts/tabelas";
+import Projeto from "layouts/projects";
 import Profile from "layouts/profile";
 import Admin from "layouts/admin";
 
@@ -45,16 +45,6 @@ import Admin from "layouts/admin";
 import Icon from "@mui/material/Icon";
 
 const routes = [
-  {
-    type: "collapse",
-    name: "Admin",
-    key: "admin",
-    icon: <Icon fontSize="small">settings</Icon>,
-    route: "/admin",
-    component: <Admin />,
-    protected: true,
-    adminOnly: true,
-  },
   {
     type: "collapse",
     name: "Perfil",
@@ -67,7 +57,17 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Dashboard",
+    name: "Projetos",
+    key: "projects",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/projeto",
+    component: <Projeto />,
+    protected: true,
+    adminOnly: false,
+  },
+  {
+    type: "collapse",
+    name: "Dashboards",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
@@ -77,13 +77,13 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Tabelas",
-    key: "tabelas",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tabelas",
-    component: <Tabelas />,
+    name: "Admin",
+    key: "admin",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/admin",
+    component: <Admin />,
     protected: true,
-    adminOnly: false,
+    adminOnly: true,
   },
 ];
 

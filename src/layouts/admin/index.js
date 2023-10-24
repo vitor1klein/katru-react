@@ -28,11 +28,11 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tabelas/DataTable";
 
 // Data
-import authorsTableData from "layouts/tabelas/data/authorsTableData";
-import projectsTableData from "layouts/tabelas/data/projectsTableData";
+import usersTableData from "layouts/tabelas/data/usersTableData";
+import projectsTableData from "layouts/tabelas/data/projectTableData";
 
 function Admin() {
-  const { columns, rows } = authorsTableData();
+  const { columns, rows } = usersTableData();
   const { columns: pColumns, rows: pRows } = projectsTableData();
 
   return (
@@ -53,7 +53,7 @@ function Admin() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Projetos
+                  Solicitações
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
@@ -80,12 +80,66 @@ function Admin() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Usuários
+                  Projetos
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns: pColumns, rows: pRows }}
+                  isSorted={false}
+                  entriesPerPage={false}
+                  showTotalEntries={false}
+                  noEndBorder
+                />
+              </MDBox>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+              >
+                <MDTypography variant="h6" color="white">
+                  Usuários
+                </MDTypography>
+              </MDBox>
+              <MDBox pt={3}>
+                <DataTable
+                  table={{ columns, rows }}
+                  isSorted={false}
+                  entriesPerPage={false}
+                  showTotalEntries={false}
+                  noEndBorder
+                />
+              </MDBox>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+              >
+                <MDTypography variant="h6" color="white">
+                  Indicadores
+                </MDTypography>
+              </MDBox>
+              <MDBox pt={3}>
+                <DataTable
+                  table={{ columns, rows }}
                   isSorted={false}
                   entriesPerPage={false}
                   showTotalEntries={false}

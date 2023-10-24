@@ -50,6 +50,7 @@ import ResendToken from "layouts/authentication/resend-token";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import Projeto from "layouts/projects";
 
 const routes = [
   {
@@ -135,6 +136,13 @@ const routes = [
     key: "unauthorized",
     route: "/unauthorized",
     component: <Unauthorized />,
+    roleRequired: "ROLE_USER",
+  },
+  {
+    name: "Projects",
+    key: "projects",
+    route: "/projeto",
+    component: <Projeto />,
     roleRequired: "ROLE_USER",
   },
 ];
