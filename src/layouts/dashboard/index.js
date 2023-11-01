@@ -18,7 +18,15 @@ import React, { useEffect, useState } from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import { DataGrid, GridRowsProp, GridColDef } from "@material-ui/data-grid";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import ListItemText from "@mui/material/ListItemText";
+import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
+// import { DataGrid, GridRowsProp, GridColDef, nlNL } from "@material-ui/data-grid";
+import { DataGrid, ptBR, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -31,9 +39,9 @@ import Footer from "examples/Footer";
 
 function Dashboard() {
   const [projects, setProjects] = useState(["Sua Cidade em Números", "Educação em Números"]);
-  const [cities, setCities] = useState(["Curitiba", "Jacarezinho"]);
+  const [cities, setCities] = useState(["Curitiba", "Jacarezinho", "Cambará"]);
   const [selectedProject, setSelectedProject] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState([]);
   const [userProjects, setUserProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,6 +60,17 @@ function Dashboard() {
     { id: 4, col1: "2021", col2: "PR", col3: "Curitiba", col4: "Total", col5: "R$ 2500,00" },
   ];
 
+  const ITEM_HEIGHT = 50;
+  const ITEM_PADDING_TOP = 2;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 200,
+      },
+    },
+  };
+
   let content;
 
   if (loading) {
@@ -60,28 +79,53 @@ function Dashboard() {
     content = "You have no projects assigned to your user, please request one.";
   } else {
     content = (
-      <>
-        {/* Render filters here */}
-        {/* First filter - List of projects */}
-        <select value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)}>
-          <option value="">Select a Project</option>
-          {projects.map((project) => (
-            <option key={project} value={project}>
-              {project}
-            </option>
-          ))}
-        </select>
-
-        {/* Second filter - List of cities */}
-        <select value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
-          <option value="">Select a City</option>
-          {cities.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
-      </>
+      <Grid container spacing={5}>
+        <Grid item xs={0}>
+          <FormControl sx={{ m: 1, width: 300 }}>
+            <InputLabel id="single-select-project">Projetos</InputLabel>
+            <Select
+              labelId="single-select-project"
+              id="single-select-project"
+              value={selectedProject}
+              label="Projetos"
+              onChange={(e) => setSelectedProject(e.target.value)}
+              input={
+                <OutlinedInput
+                  sx={{ height: 50 }} // Adjust the height as needed
+                />
+              }
+            >
+              {projects.map((project) => (
+                <MenuItem key={project} value={project}>
+                  {project}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={2}>
+          <FormControl sx={{ m: 1, width: 300 }}>
+            <InputLabel id="multiple-checkbox-municipios">Municípios</InputLabel>
+            <Select
+              labelId="multiple-checkbox-municipios"
+              id="multiple-checkbox-municipios"
+              multiple
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              input={<OutlinedInput label="Municípios" sx={{ height: 50 }} />}
+              renderValue={(selected) => selected.join(", ")}
+              MenuProps={MenuProps}
+            >
+              {cities.map((city) => (
+                <MenuItem key={city} value={city}>
+                  <Checkbox checked={selectedCity.indexOf(city) > -1} />
+                  <ListItemText primary={city} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
     );
   }
 
@@ -90,7 +134,7 @@ function Dashboard() {
     // Example:
     const response = await fetch("/api/listUserProjects");
     if (!response.ok) {
-      throw new Error("Failed to fetch user projects");
+      throw new Error("Falha em carregar os projetos do usuário.");
     }
     const data = await response.json();
     return data;
@@ -140,8 +184,12 @@ function Dashboard() {
               <MDBox pt={3} pb={2} style={{ marginLeft: "50px" }}>
                 {content}
               </MDBox>
-              <div style={{ height: 300, width: "100%" }}>
-                <DataGrid rows={rows} columns={columns} />
+              <div style={{ height: 500, width: "95%", marginLeft: "30px" }}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
+                />
               </div>
             </Card>
           </Grid>
